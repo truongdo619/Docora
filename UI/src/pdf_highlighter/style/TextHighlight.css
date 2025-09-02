@@ -1,0 +1,100 @@
+.TextHighlight {
+  position: absolute;
+}
+
+.TextHighlight__parts {
+  opacity: 1;
+}
+
+.TextHighlight__part {
+  cursor: pointer;
+  position: absolute;
+  transition: background 0.3s;
+}
+
+
+.TextHighlight--scrolledTo .TextHighlight__part{
+    /* darker   */  filter: brightness(60%) 
+                     /* punchier */ saturate(180%) 
+                     /* clearer  */ contrast(120%);
+    font-weight: 700;
+}
+
+.BLOCK_INDEX {
+  background-color: #28A9E1;
+}
+
+.BLOCK_PARAGRAPH{
+  background-color: #f7888880;
+}
+
+.BLOCK_TEXT{
+  background-color: #f7888880;
+}
+
+.BLOCK_TITLE{
+  background-color: #d1d1ff;
+}
+
+.BLOCK_LIST{
+  background-color: #bfe5ce;
+}
+
+.BLOCK_DISCARDED{
+  background-color: #e2e2e2;
+}
+
+.BLOCK_IMAGE_BODY{
+  background-color: #e0fec1;
+}
+
+.BLOCK_IMAGE_CAPTION{
+  background-color: #d1e8ff;
+}
+
+.BLOCK_IMAGE_FOOTNOTE{
+  background-color: #FFB266;
+}
+
+.BLOCK_INTEREQUATION{
+  background-color: #00FF00;
+}
+
+.BLOCK_TABLE_BODY{
+  background-color: #f0f0b3;
+}
+
+.BLOCK_TABLE_CAPTION{
+  background-color: #ffffd1;
+}
+
+.BLOCK_TABLE_FOOTNOTE{
+  background-color: #f7fff0;
+}
+
+.TextHighlight--scrolledTo :is(
+  .BLOCK_PARAGRAPH,
+  .BLOCK_TEXT,
+  .BLOCK_TITLE,
+  .BLOCK_LIST,
+  .BLOCK_DISCARDED,
+  .BLOCK_IMAGE_BODY,
+  .BLOCK_IMAGE_CAPTION,
+  .BLOCK_TABLE_BODY,
+  .BLOCK_TABLE_CAPTION,
+  .BLOCK_TABLE_FOOTNOTE,
+  .BLOCK_INDEX,
+  .BLOCK_INTEREQUATION,
+  .BLOCK_IMAGE_FOOTNOTE
+) {
+  background: #ff000080;
+}
+
+
+
+
+
+
+.TextHighlight span.MuiBadge-badge {
+  color: white;
+}

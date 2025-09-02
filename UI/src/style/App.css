@@ -1,0 +1,38 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  background-color: #ffffff;
+  color: #333333;
+}
+
+.MuiTableCell-head div{
+  font-weight: bold!important;
+}
+
+.document-list .MuiPaper-root{
+  box-shadow: none;
+}
+
+.document-list table, .document-list th, .document-list td {
+  border: 1px solid rgba(224, 224, 224, 1)
+}
+
+.document-list .MuiToolbar-root{
+  padding: 0;
+}
+
+.document-list .MuiToolbar-root .MuiTypography-root{
+  font-size: 1.6rem;
+  font-weight: 400;
+}
+
+.document-list div{
+  background-color: transparent;
+}
+
+.document-list thead th .MuiButtonBase-root{
+  padding-left: 0;
+  margin-left: 0;
+}

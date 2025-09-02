@@ -1,0 +1,18 @@
+/* styles.css */
+.custom-fileUploader {
+    width: 96%; /* Adjust the width as needed */
+    max-width: 100%!important; /* Ensure it doesn't exceed the container */
+    height: 14vh!important; /* Adjust the height as needed */
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    color: #333;
+}
+
+
+.custom-fileUploader span{
+    font-size: 1.1rem!important;
+}

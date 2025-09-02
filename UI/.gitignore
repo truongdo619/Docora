@@ -1,0 +1,11 @@
+node_modules
+doc
+.vscode/
+.DS_Store
+dist
+dist-ssr
+dist-example
+*.local
+types
+local
+example-app

@@ -1,0 +1,37 @@
+.AreaHighlight__part {
+  cursor: pointer;
+  position: absolute;
+  background: rgba(255, 226, 143, 1);
+  transition: background 0.3s;
+}
+
+.AreaHighlight--scrolledTo .AreaHighlight__part {
+  background: #ff4141;
+}
+.AreaHighlight--scrolledTo .INORGANIC {
+  background: #ff4141;
+}
+.AreaHighlight--scrolledTo .CHAR_METHOD {
+  background: #ff4141;
+}
+.AreaHighlight--scrolledTo .PROP_NAME {
+  background: #ff4141;
+}
+.AreaHighlight--scrolledTo .POLYMER {
+  background: #ff4141;
+}
+.AreaHighlight--scrolledTo .ORGANIC {
+  background: #ff4141;
+}
+.AreaHighlight--scrolledTo .MATERIAL_AMOUNT {
+  background: #ff4141;
+}
+.AreaHighlight--scrolledTo .INORGANIC {
+  background: #ff4141;
+}
+.AreaHighlight--scrolledTo .CONDITION {
+  background: #ff4141;
+}
+.AreaHighlight--scrolledTo .REF_EXP {
+  background: #ff4141;
+}
