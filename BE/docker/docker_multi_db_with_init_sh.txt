@@ -1,0 +1,62 @@
+version: '3.7'
+services:
+  # db_1:
+  #   image: postgres:latest
+  #   environment:
+  #     POSTGRES_USER: admin
+  #     POSTGRES_PASSWORD: admin
+  #     POSTGRES_DB: polyminder
+  #   ports:
+  #     - 5432:5432
+  #   volumes:
+  #     - type: bind
+  #       source: /home/antrieu/data  # Path on the host machine
+  #       target: /var/lib/postgresql/data  # Path in the container
+  # db_2:
+  #   image: postgres:latest
+  #   environment:
+  #     POSTGRES_USER: admin
+  #     POSTGRES_PASSWORD: admin
+  #     POSTGRES_DB: polyminder_dev
+  #   ports:
+  #     - 5433:5432
+  #   volumes:
+  #     - type: bind
+  #       source: /home/antrieu/test_data  # Path on the host machine
+  #       target: /var/lib/postgresql/data  # Path in the container
+  db:
+    image: postgres:latest
+    # container_name: db
+    ports:
+      - 5432:5432
+    environment:
+        POSTGRES_MULTIPLE_DATABASES: polyminder, polyminder_dev
+        POSTGRES_USER: admin
+        POSTGRES_PASSWORD: admin
+        
+    volumes:
+     - /home/antrieu/multiple_sh:/docker-entrypoint-initdb.d
+     - type: bind
+       source: /home/antrieu/data  # Path on the host machine
+       target: /var/lib/postgresql/data  # Path in the container
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    ports:
+        - 5672:5672
+        - 15672:15672
+    volumes:
+        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+        - rabbitmq_go_net
+
+networks:
+  rabbitmq_go_net:
+    driver: bridge
+    
+volumes: {}

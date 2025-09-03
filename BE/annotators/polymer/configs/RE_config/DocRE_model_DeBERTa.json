@@ -1,0 +1,10 @@
+{
+    "load_path": "annotators/polymer/resources/pretrained_models/DocRE_model_DeBERTa-v3-large_2025.pt",
+    "transformer_type": "bert",
+    "model_name_or_path": "microsoft/deberta-v3-large",
+    "test_batch_size": 8,
+    "num_labels": 1,
+    "seed": 66,
+    "num_class": 9,
+    "max_seq_length": 1024
+}

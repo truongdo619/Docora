@@ -1,0 +1,458 @@
+{
+    "domain":"material",
+    "setting":{
+        
+        "entity_types": [
+        {
+            "type": "VALUE",
+            "labels": [
+            "VALUE"
+            ],
+            "bgColor": "#6f00ff",
+            "borderColor": "darken"
+        },
+        {
+            "type": "POLYMER",
+            "labels": [
+            "POLYMER"
+            ],
+            "bgColor": "#ff4500",
+            "borderColor": "darken"
+        },
+        {
+            "type": "POLYMER_FAMILY",
+            "labels": [
+            "POLYMER_FAMILY"
+            ],
+            "bgColor": "#00ff00",
+            "borderColor": "darken"
+        },
+        {
+            "type": "PROP_VALUE",
+            "labels": [
+            "PROP_VALUE"
+            ],
+            "bgColor": "#ce6f03",
+            "borderColor": "darken"
+        },
+        {
+            "type": "PROP_NAME",
+            "labels": [
+            "PROP_NAME"
+            ],
+            "bgColor": "#1e90ff",
+            "borderColor": "darken"
+        },
+        {
+            "type": "MONOMER",
+            "labels": [
+            "MONOMER"
+            ],
+            "bgColor": "#B8BDD3",
+            "borderColor": "darken"
+        },
+        {
+            "type": "ORGANIC",
+            "labels": [
+            "ORGANIC"
+            ],
+            "bgColor": "#ff00ff",
+            "borderColor": "darken"
+        },
+        {
+            "type": "INORGANIC",
+            "labels": [
+            "INORGANIC"
+            ],
+            "bgColor": "#00ffff",
+            "borderColor": "darken"
+        },
+        {
+            "type": "MATERIAL_AMOUNT",
+            "labels": [
+            "MATERIAL_AMOUNT"
+            ],
+            "bgColor": "#a0522d",
+            "borderColor": "darken"
+        },
+        {
+            "type": "CONDITION",
+            "labels": [
+            "CONDITION"
+            ],
+            "bgColor": "#ffe000",
+            "borderColor": "darken"
+        },
+        {
+            "type": "REF_EXP",
+            "labels": [
+            "REF_EXP"
+            ],
+            "bgColor": "#bd0ea5",
+            "borderColor": "darken"
+        },
+        {
+            "type": "OTHER_MATERIAL",
+            "labels": [
+            "OTHER_MATERIAL"
+            ],
+            "bgColor": "#1976d2",
+            "borderColor": "darken"
+        },
+        {
+            "type": "COMPOSITE",
+            "labels": [
+            "COMPOSITE"
+            ],
+            "bgColor": "#00ff88",
+            "borderColor": "darken"
+        },
+        {
+            "type": "SYN_METHOD",
+            "labels": [
+            "SYN_METHOD"
+            ],
+            "bgColor": "#f09bc5",
+            "borderColor": "darken"
+        },
+        {
+            "type": "CHAR_METHOD",
+            "labels": [
+            "CHAR_METHOD"
+            ],
+            "bgColor": "#a0778a",
+            "borderColor": "darken"
+        },
+        {
+            "type": "EVENT",
+            "labels": [
+            "EVENT"
+            ],
+            "bgColor": "#32CD32",
+            "borderColor": "darken"
+        }
+        ],
+        "relation_types": [
+        {
+            "type": "<OVERLAP>",
+            "dashArray": "3,3",
+            "color": "black",
+            "labels": [
+            "<OVERLAP>",
+            "O"
+            ],
+            "args": [
+            {
+                "role": "Arg1",
+                "targets": [
+                "<ENTITY>"
+                ]
+            },
+            {
+                "role": "Arg2",
+                "targets": [
+                "<ENTITY>"
+                ]
+            }
+            ]
+        },
+        {
+            "type": "has_property",
+            "dashArray": "3,3",
+            "color": "purple",
+            "labels": [
+            "has_property",
+            "has_p"
+            ],
+            "args": [
+            {
+                "role": "Arg1",
+                "targets": [
+                "POLYMER",
+                "POLYMER_FAMILY",
+                "MONOMER",
+                "ORGANIC",
+                "INORGANIC",
+                "COMPOSITE",
+                "OTHER_MATERIAL",
+                "REF_EXP"
+                ]
+            },
+            {
+                "role": "Arg2",
+                "targets": [
+                "PROP_NAME",
+                "REF_EXP"
+                ]
+            }
+            ]
+        },
+        {
+            "type": "has_value",
+            "dashArray": "3,3",
+            "color": "green",
+            "labels": [
+            "has_value",
+            "has_v"
+            ],
+            "args": [
+            {
+                "role": "Arg1",
+                "targets": [
+                "POLYMER",
+                "POLYMER_FAMILY",
+                "MONOMER",
+                "ORGANIC",
+                "INORGANIC",
+                "COMPOSITE",
+                "OTHER_MATERIAL",
+                "PROP_NAME",
+                "REF_EXP"
+                ]
+            },
+            {
+                "role": "Arg2",
+                "targets": [
+                "PROP_VALUE"
+                ]
+            }
+            ]
+        },
+        {
+            "type": "has_amount",
+            "dashArray": "3,3",
+            "color": "red",
+            "labels": [
+            "has_amount",
+            "has_a"
+            ],
+            "args": [
+            {
+                "role": "Arg1",
+                "targets": [
+                "POLYMER",
+                "POLYMER_FAMILY",
+                "MONOMER",
+                "ORGANIC",
+                "INORGANIC",
+                "COMPOSITE",
+                "OTHER_MATERIAL",
+                "REF_EXP"
+                ]
+            },
+            {
+                "role": "Arg2",
+                "targets": [
+                "MATERIAL_AMOUNT"
+                ]
+            }
+            ]
+        },
+        {
+            "type": "has_condition",
+            "dashArray": "3,3",
+            "color": "gray",
+            "labels": [
+            "has_condition",
+            "has_c"
+            ],
+            "args": [
+            {
+                "role": "Arg1",
+                "targets": [
+                "PROP_NAME",
+                "PROP_VALUE",
+                "REF_EXP"
+                ]
+            },
+            {
+                "role": "Arg2",
+                "targets": [
+                "CONDITION"
+                ]
+            }
+            ]
+        },
+        {
+            "type": "abbreviation_of",
+            "dashArray": "3,3",
+            "color": "blue",
+            "labels": [
+            "abbreviation_of",
+            "abbre"
+            ],
+            "args": [
+            {
+                "role": "Arg1",
+                "targets": [
+                "POLYMER",
+                "POLYMER_FAMILY",
+                "MONOMER",
+                "ORGANIC",
+                "INORGANIC",
+                "COMPOSITE",
+                "OTHER_MATERIAL",
+                "PROP_NAME",
+                "SYN_METHOD",
+                "CHAR_METHOD"
+                ]
+            },
+            {
+                "role": "Arg2",
+                "targets": [
+                "POLYMER",
+                "POLYMER_FAMILY",
+                "MONOMER",
+                "ORGANIC",
+                "INORGANIC",
+                "COMPOSITE",
+                "OTHER_MATERIAL",
+                "PROP_NAME",
+                "SYN_METHOD",
+                "CHAR_METHOD"
+                ]
+            }
+            ]
+        },
+        {
+            "type": "refers_to",
+            "dashArray": "3,3",
+            "color": "purple",
+            "labels": [
+            "refers_to",
+            "refer"
+            ],
+            "args": [
+            {
+                "role": "Arg1",
+                "targets": [
+                "REF_EXP"
+                ]
+            },
+            {
+                "role": "Arg2",
+                "targets": [
+                "POLYMER",
+                "POLYMER_FAMILY",
+                "MONOMER",
+                "ORGANIC",
+                "INORGANIC",
+                "COMPOSITE",
+                "OTHER_MATERIAL",
+                "PROP_NAME",
+                "SYN_METHOD",
+                "CHAR_METHOD",
+                "REF_EXP"
+                ]
+            }
+            ]
+        },
+        {
+            "type": "synthesised_by",
+            "dashArray": "3,3",
+            "color": "red",
+            "labels": [
+            "synthesised_by",
+            "synth"
+            ],
+            "args": [
+            {
+                "role": "Arg1",
+                "targets": [
+                "POLYMER",
+                "POLYMER_FAMILY",
+                "MONOMER",
+                "ORGANIC",
+                "INORGANIC",
+                "COMPOSITE",
+                "OTHER_MATERIAL",
+                "REF_EXP"
+                ]
+            },
+            {
+                "role": "Arg2",
+                "targets": [
+                "SYN_METHOD"
+                ]
+            }
+            ]
+        },
+        {
+            "type": "characterized_by",
+            "dashArray": "3,3",
+            "color": "black",
+            "labels": [
+            "characterized_by",
+            "chara"
+            ],
+            "args": [
+            {
+                "role": "Arg1",
+                "targets": [
+                "POLYMER",
+                "POLYMER_FAMILY",
+                "MONOMER",
+                "ORGANIC",
+                "INORGANIC",
+                "COMPOSITE",
+                "OTHER_MATERIAL",
+                "REF_EXP",
+                "PROP_NAME"
+                ]
+            },
+            {
+                "role": "Arg2",
+                "targets": [
+                "CHAR_METHOD"
+                ]
+            }
+            ]
+        }
+        ],
+        "event_types": [
+        {
+            "type": "PropertyInfo",
+            "labels": [
+            "PropertyInfo",
+            "PropInfo"
+            ],
+            "bgColor": "#32CD32",
+            "borderColor": "darken",
+            "arcs": [
+            {
+                "type": "Polymer",
+                "labels": [
+                "Polymer",
+                "Polymer"
+                ],
+                "color": "#b22222"
+            },
+            {
+                "type": "Value",
+                "labels": [
+                "Value",
+                "Value"
+                ],
+                "color": "#cd6600"
+            },
+            {
+                "type": "Condition",
+                "labels": [
+                "Condition",
+                "Condition"
+                ],
+                "color": "#ffe000"
+            },
+            {
+                "type": "Char_method",
+                "labels": [
+                "Char_method",
+                "Char_method"
+                ],
+                "color": "#696969"
+            }
+            ]
+        }
+        ]
+    }
+}

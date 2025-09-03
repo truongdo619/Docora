@@ -1,0 +1,25 @@
+{
+    "domain": "legal",
+    "setting": {
+      "entity_types": [
+        { "type": "COURT",         "labels": ["COURT"],         "bgColor": "#bbabf2", "borderColor": "darken" },
+        { "type": "PETITIONER",    "labels": ["PETITIONER"],    "bgColor": "#f570ea", "borderColor": "darken" },
+        { "type": "RESPONDENT",    "labels": ["RESPONDENT"],    "bgColor": "#cdee81", "borderColor": "darken" },
+        { "type": "JUDGE",         "labels": ["JUDGE"],         "bgColor": "#fdd8a5", "borderColor": "darken" },
+        { "type": "LAWYER",        "labels": ["LAWYER"],        "bgColor": "#f9d380", "borderColor": "darken" },
+        { "type": "WITNESS",       "labels": ["WITNESS"],       "bgColor": "violet",  "borderColor": "darken" },
+        { "type": "STATUTE",       "labels": ["STATUTE"],       "bgColor": "#faea99", "borderColor": "darken" },
+        { "type": "PROVISION",     "labels": ["PROVISION"],     "bgColor": "yellow",  "borderColor": "darken" },
+        { "type": "CASE_NUMBER",   "labels": ["CASE_NUMBER"],   "bgColor": "#fbb1cf", "borderColor": "darken" },
+        { "type": "PRECEDENT",     "labels": ["PRECEDENT"],     "bgColor": "#fad6d6", "borderColor": "darken" },
+        { "type": "DATE",          "labels": ["DATE"],          "bgColor": "#b1ecf7", "borderColor": "darken" },
+        { "type": "OTHER_PERSON",  "labels": ["OTHER_PERSON"],  "bgColor": "#b0f6a2", "borderColor": "darken" },
+        { "type": "ORG",           "labels": ["ORG"],           "bgColor": "#a57db5", "borderColor": "darken" },
+        { "type": "GPE",           "labels": ["GPE"],           "bgColor": "#7fdbd4", "borderColor": "darken" }
+      ],
+      "relation_types": [
+        
+      ]
+    }
+  }
+  

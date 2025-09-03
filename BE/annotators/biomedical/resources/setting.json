@@ -1,0 +1,131 @@
+{
+    "domain": "biomedical",
+    "setting": {
+      "entity_types": [
+        { "type": "PERSON",        "labels": ["PERSON"],        "bgColor": "#ff6b6b", "borderColor": "darken" },
+        { "type": "ORGANIZATION",  "labels": ["ORGANIZATION"],  "bgColor": "#4dabf7", "borderColor": "darken" },
+        { "type": "LOCATION",      "labels": ["LOCATION"],      "bgColor": "#51cf66", "borderColor": "darken" },
+        { "type": "TIME",          "labels": ["TIME"],          "bgColor": "#ffd43b", "borderColor": "darken" },
+        { "type": "NUMBER",        "labels": ["NUMBER"],        "bgColor": "#845ef7", "borderColor": "darken" },
+        { "type": "MISC",          "labels": ["MISC"],          "bgColor": "#868e96", "borderColor": "darken" },
+        { "type": "CHEMICAL",      "labels": ["CHEMICAL"],      "bgColor": "#1e90ff", "borderColor": "darken" },
+        { "type": "DISEASE",       "labels": ["DISEASE"],       "bgColor": "#ff8c69", "borderColor": "darken" }
+      ],
+      "relation_types": [
+        {
+          "type": "BELONGS_TO_FAMILY",
+          "labels": ["BELONGS_TO_FAMILY"],
+          "args": [
+            { "role": "Arg1", "targets": ["PERSON","ORGANIZATION","LOCATION","TIME","NUMBER","MISC","CHEMICAL","DISEASE"] },
+            { "role": "Arg2", "targets": ["PERSON","ORGANIZATION","LOCATION","TIME","NUMBER","MISC","CHEMICAL","DISEASE"] }
+          ]
+        },
+        {
+          "type": "HAS_MONOMER",
+          "labels": ["HAS_MONOMER"],
+          "args": [
+            { "role": "Arg1", "targets": ["PERSON","ORGANIZATION","LOCATION","TIME","NUMBER","MISC","CHEMICAL","DISEASE"] },
+            { "role": "Arg2", "targets": ["PERSON","ORGANIZATION","LOCATION","TIME","NUMBER","MISC","CHEMICAL","DISEASE"] }
+          ]
+        },
+        {
+          "type": "HAS_PROPERTY",
+          "labels": ["HAS_PROPERTY"],
+          "args": [
+            { "role": "Arg1", "targets": ["PERSON","ORGANIZATION","LOCATION","TIME","NUMBER","MISC","CHEMICAL","DISEASE"] },
+            { "role": "Arg2", "targets": ["PERSON","ORGANIZATION","LOCATION","TIME","NUMBER","MISC","CHEMICAL","DISEASE"] }
+          ]
+        },
+        {
+          "type": "HAS_PROP_VALUE",
+          "labels": ["HAS_PROP_VALUE"],
+          "args": [
+            { "role": "Arg1", "targets": ["PERSON","ORGANIZATION","LOCATION","TIME","NUMBER","MISC","CHEMICAL","DISEASE"] },
+            { "role": "Arg2", "targets": ["PERSON","ORGANIZATION","LOCATION","TIME","NUMBER","MISC","CHEMICAL","DISEASE"] }
+          ]
+        },
+        {
+          "type": "VALUE_UNIT",
+          "labels": ["VALUE_UNIT"],
+          "args": [
+            { "role": "Arg1", "targets": ["PERSON","ORGANIZATION","LOCATION","TIME","NUMBER","MISC","CHEMICAL","DISEASE"] },
+            { "role": "Arg2", "targets": ["PERSON","ORGANIZATION","LOCATION","TIME","NUMBER","MISC","CHEMICAL","DISEASE"] }
+          ]
+        },
+        {
+          "type": "MEASURED_BY",
+          "labels": ["MEASURED_BY"],
+          "args": [
+            { "role": "Arg1", "targets": ["PERSON","ORGANIZATION","LOCATION","TIME","NUMBER","MISC","CHEMICAL","DISEASE"] },
+            { "role": "Arg2", "targets": ["PERSON","ORGANIZATION","LOCATION","TIME","NUMBER","MISC","CHEMICAL","DISEASE"] }
+          ]
+        },
+        {
+          "type": "MEASURED_ON",
+          "labels": ["MEASURED_ON"],
+          "args": [
+            { "role": "Arg1", "targets": ["PERSON","ORGANIZATION","LOCATION","TIME","NUMBER","MISC","CHEMICAL","DISEASE"] },
+            { "role": "Arg2", "targets": ["PERSON","ORGANIZATION","LOCATION","TIME","NUMBER","MISC","CHEMICAL","DISEASE"] }
+          ]
+        },
+        {
+          "type": "UNDER_CONDITION",
+          "labels": ["UNDER_CONDITION"],
+          "args": [
+            { "role": "Arg1", "targets": ["PERSON","ORGANIZATION","LOCATION","TIME","NUMBER","MISC","CHEMICAL","DISEASE"] },
+            { "role": "Arg2", "targets": ["PERSON","ORGANIZATION","LOCATION","TIME","NUMBER","MISC","CHEMICAL","DISEASE"] }
+          ]
+        },
+        {
+          "type": "CONDITION_HAS_VALUE",
+          "labels": ["CONDITION_HAS_VALUE"],
+          "args": [
+            { "role": "Arg1", "targets": ["PERSON","ORGANIZATION","LOCATION","TIME","NUMBER","MISC","CHEMICAL","DISEASE"] },
+            { "role": "Arg2", "targets": ["PERSON","ORGANIZATION","LOCATION","TIME","NUMBER","MISC","CHEMICAL","DISEASE"] }
+          ]
+        },
+        {
+          "type": "USES_CATALYST",
+          "labels": ["USES_CATALYST"],
+          "args": [
+            { "role": "Arg1", "targets": ["PERSON","ORGANIZATION","LOCATION","TIME","NUMBER","MISC","CHEMICAL","DISEASE"] },
+            { "role": "Arg2", "targets": ["PERSON","ORGANIZATION","LOCATION","TIME","NUMBER","MISC","CHEMICAL","DISEASE"] }
+          ]
+        },
+        {
+          "type": "USES_SOLVENT",
+          "labels": ["USES_SOLVENT"],
+          "args": [
+            { "role": "Arg1", "targets": ["PERSON","ORGANIZATION","LOCATION","TIME","NUMBER","MISC","CHEMICAL","DISEASE"] },
+            { "role": "Arg2", "targets": ["PERSON","ORGANIZATION","LOCATION","TIME","NUMBER","MISC","CHEMICAL","DISEASE"] }
+          ]
+        },
+        {
+          "type": "HAS_ADDITIVE",
+          "labels": ["HAS_ADDITIVE"],
+          "args": [
+            { "role": "Arg1", "targets": ["PERSON","ORGANIZATION","LOCATION","TIME","NUMBER","MISC","CHEMICAL","DISEASE"] },
+            { "role": "Arg2", "targets": ["PERSON","ORGANIZATION","LOCATION","TIME","NUMBER","MISC","CHEMICAL","DISEASE"] }
+          ]
+        },
+        {
+          "type": "ALIAS_OF",
+          "labels": ["ALIAS_OF"],
+          "symmetric": true,
+          "args": [
+            { "role": "Arg1", "targets": ["PERSON","ORGANIZATION","LOCATION","TIME","NUMBER","MISC","CHEMICAL","DISEASE"] },
+            { "role": "Arg2", "targets": ["PERSON","ORGANIZATION","LOCATION","TIME","NUMBER","MISC","CHEMICAL","DISEASE"] }
+          ]
+        },
+        {
+          "type": "CID",
+          "labels": ["CID"],
+          "args": [
+            { "role": "Arg1", "targets": ["CHEMICAL"] },
+            { "role": "Arg2", "targets": ["DISEASE"] }
+          ]
+        }
+      ]
+    }
+  }
+  

@@ -1,0 +1,6 @@
+{
+    "gmail_app_password":"goir ptrm pzau pikb",
+    "smtp_host" : "smtp.gmail.com"  ,
+    "smtp_port" : 587 ,
+    "from_email" : "polyminder.no.reply@gmail.com" 
+}
