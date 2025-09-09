@@ -3,7 +3,6 @@
 The **Docora Backend** provides PDF parsing, automated annotation, and data management services for the Docora system.  
 It exposes APIs via **FastAPI**, coordinates annotation pipelines, and integrates with **Celery** and **PostgreSQL** for task management and storage.
 
----
 
 ## Table of Contents
 1. [Project Overview](#project-overview)  
@@ -16,7 +15,6 @@ It exposes APIs via **FastAPI**, coordinates annotation pipelines, and integrate
 8. [Adding New Domain Annotators](#adding-new-domain-annotators)  
 9. [Supported Domains and Results](#supported-domains-and-results)  
 
----
 
 ## Project Overview
 
@@ -26,7 +24,6 @@ The backend is responsible for:
 - Storing structured entities, relations, and metadata in a PostgreSQL database.  
 - Providing APIs to the Docora frontend for visualization and editing.  
 
----
 
 ## Project Structure
 
@@ -43,7 +40,6 @@ backend/
 └── utils/           # Helper scripts
 ```
 
----
 
 ## Environment Setup
 
@@ -63,14 +59,12 @@ pip install -U "magic-pdf[full]"
 pip install python-multipart
 ```
 
----
 
 ## Download Pretrained Models
 
 Place pretrained models in the `backend/models/` directory.  
 Download links are available here: [Google Drive](https://drive.google.com/drive/folders/1dsoae6AOPXOV0tLwK3t2gya6Sf7Zi6rd?usp=sharing).
 
----
 
 ## Inference Instructions
 (Note: A CoreNLP server, such as stanford-corenlp-4.5.4, needs to be running to perform sentence splitting and tokenization.
@@ -101,7 +95,6 @@ For inference, run the system:
 uvicorn app:app --host 0.0.0.0 --port 8000
 ```
 
----
 
 ## Adding New Domain Annotators
 
@@ -117,7 +110,6 @@ Docora’s backend is designed for **extensibility**. To add a new domain:
 
 Your annotator will now be available as part of the pipeline, and the frontend will automatically display results according to the schema.
 
----
 
 ## Supported Domains and Results
 
@@ -133,7 +125,6 @@ Currently supported domains are:
 
 🚀 With Docora backend, researchers can integrate domain-specific knowledge extraction pipelines while benefiting from a unified frontend for annotation and visualization.
 
----
 
 ## License
 
