@@ -3,7 +3,6 @@
 The **Docora Frontend** is a modular React-based application for parsing, annotating, and visualizing knowledge directly from scientific PDFs.  
 It supports **domain-agnostic schemas**, automated annotation assistance, and synchronized multi-view visualizations (PDF, text, and graph).  
 
----
 
 ## Table of Contents
 1. [Project Structure](#project-structure)  
@@ -14,7 +13,6 @@ It supports **domain-agnostic schemas**, automated annotation assistance, and sy
 6. [Typed API Docs](#typed-api-docs)  
 7. [License](#license)  
 
----
 
 ## Project Structure
 
@@ -35,7 +33,6 @@ It supports **domain-agnostic schemas**, automated annotation assistance, and sy
 - **`src/`** – Main React frontend for annotation, visualization, and schema-based workflows.  
 - **`dist/`** – Output directory created by `npm run build`.  
 
----
 
 ## Key Techniques & Libraries
 
@@ -46,7 +43,6 @@ It supports **domain-agnostic schemas**, automated annotation assistance, and sy
 | **Multi-View Visualization** | PDF highlights, [`Brat-style`](https://brat.nlplab.org/) text view, and interactive graphs with [`vis-network`](https://github.com/visjs/vis-network). |
 | **Tables** | Metadata browsing with MUI X [`DataGridPro`](https://mui.com/x/react-data-grid/). |
 
----
 
 ## Installation
 
@@ -59,7 +55,6 @@ cd Docora/web_interface
 npm install
 ```
 
----
 
 ## Running Locally
 
@@ -78,7 +73,6 @@ npm install
 
    Open <http://localhost:3001> in your browser for live development with hot reload.
 
----
 
 ## Building for Production
 
@@ -94,7 +88,6 @@ To clean build artifacts and docs:
 npm run clean
 ```
 
----
 
 ## Typed API Docs
 
@@ -106,12 +99,10 @@ npm run build:docs
 
 Docs are generated in `public/docs` and can be hosted on any static server.
 
----
 
 ## License
 
 Distributed under the **MIT License**. See [`LICENSE`](./LICENSE) for details.  
 
----
 
 ✨ **Docora Website:** [https://www.jaist.ac.jp/is/labs/nguyen-lab/systems/docora](https://www.jaist.ac.jp/is/labs/nguyen-lab/systems/docora)
