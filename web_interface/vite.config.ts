@@ -10,7 +10,7 @@ export default defineConfig({
   plugins: [reactRefresh()],
   server: {
     host: "0.0.0.0",
-    port: 3002,
+    port: 3001,
   },
   optimizeDeps: {
     esbuildOptions: {
