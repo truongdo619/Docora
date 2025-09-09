@@ -7,7 +7,7 @@ import { GlobalContext } from '../../GlobalState';
 
 type VisOptions = Record<string, any>;          // quick-and-dirty helper
 
-const TreeVisualizationExample: React.FC<{ highlightId: string }> = ({ highlightId }) => {
+const GraphVisualization: React.FC<{ highlightId: string }> = ({ highlightId }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [network, setNetwork] = useState<Network | null>(null);
 
@@ -73,4 +73,4 @@ const TreeVisualizationExample: React.FC<{ highlightId: string }> = ({ highlight
   );
 };
 
-export default TreeVisualizationExample;
+export default GraphVisualization;

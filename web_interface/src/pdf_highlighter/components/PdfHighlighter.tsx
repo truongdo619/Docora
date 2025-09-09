@@ -51,7 +51,7 @@ import {
 import { HighlightLayer } from "./HighlightLayer";
 import { MouseSelection } from "./MouseSelection";
 import { TipContainer } from "./TipContainer";
-import TreeVisualizationExample from './TreeVisualizationExample';
+import GraphVisualization from './GraphVisualization';
 
 // Material UI dialog imports
 import Dialog from '@mui/material/Dialog';
@@ -781,7 +781,7 @@ export const PdfHighlighter = ({
       <DialogTitle>Graph Visualization</DialogTitle>
       <DialogContent>
         {treeDialogHighlightId && (
-          <TreeVisualizationExample highlightId={treeDialogHighlightId} />
+          <GraphVisualization highlightId={treeDialogHighlightId} />
           // <HardCodedVisExample />
         )}
       </DialogContent>

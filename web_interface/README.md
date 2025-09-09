@@ -43,11 +43,8 @@ It supports **domain-agnostic schemas**, automated annotation assistance, and sy
 |------|------------|
 | **PDF Parsing & Rendering** | [`pdfjs-dist`](https://github.com/mozilla/pdfjs-dist) for rendering; backend integration with [`PyMuPDF`](https://pymupdf.readthedocs.io). |
 | **Automated Annotations** | Rule-based, Transformer-based, or LLM-based extractors integrated via backend API. |
-| **Multi-View Visualization** | PDF highlights, Brat-style text view, and interactive graphs with [`reactflow`](https://reactflow.dev/). |
-| **Annotation UI** | Drag-and-drop with [`react-beautiful-dnd`](https://github.com/atlassian/react-beautiful-dnd) and resizing with [`react-rnd`](https://github.com/bokuweb/react-rnd). |
+| **Multi-View Visualization** | PDF highlights, [`Brat-style`](https://brat.nlplab.org/) text view, and interactive graphs with [`vis-network`](https://github.com/visjs/vis-network). |
 | **Tables** | Metadata browsing with MUI X [`DataGridPro`](https://mui.com/x/react-data-grid/). |
-| **State Management** | React Context + Reducers with dynamic schema configuration. |
-| **Build Tools & Docs** | Built with **Vite 4** for fast HMR; **TypeDoc** for API docs. |
 
 ---
 
@@ -56,7 +53,7 @@ It supports **domain-agnostic schemas**, automated annotation assistance, and sy
 ```bash
 # Clone the repository
 git clone https://github.com/truongdo619/Docora.git
-cd Docora
+cd Docora/web_interface
 
 # Install dependencies
 npm install
