@@ -1,0 +1,47 @@
+{
+    "default_node": {
+      "position": { "x": 250, "y": 0 },
+      "sourcePosition": "right",
+      "targetPosition": "left"
+    },
+    "options": {
+      "layout": { "improvedLayout": true },
+      "physics": {
+        "enabled": true,
+        "solver": "forceAtlas2Based",
+        "forceAtlas2Based": {
+          "gravitationalConstant": -50,
+          "centralGravity": 0.005,
+          "springLength": 140,
+          "springConstant": 0.08,
+          "damping": 0.4,
+          "avoidOverlap": 1
+        },
+        "stabilization": { "iterations": 200 }
+      },
+      "interaction": {
+        "hover": true,
+        "zoomView": true,
+        "dragView": true,
+        "dragNodes": true
+      },
+      "nodes": {
+        "shape": "box",
+        "borderRadius": 6,
+        "font": { "face": "Roboto", "size": 14 },
+        "color": {
+          "border": "#2B7CE9",
+          "background": "#97C2FC",
+          "highlight": { "border": "#2B7CE9", "background": "#D2E5FF" },
+          "hover": { "border": "#2B7CE9", "background": "#D2E5FF" }
+        }
+      },
+      "edges": {
+        "arrows": { "to": { "enabled": true, "scaleFactor": 0.7 } },
+        "smooth": { "type": "cubicBezier", "roundness": 0.4 },
+        "color": { "color": "#848484", "highlight": "#343434", "hover": "#343434" },
+        "font": { "align": "middle" }
+      }
+    }
+  }
+  
