@@ -31,29 +31,14 @@ from crud.psql import document as document_crud
 # from models.psql import document as document_model
 
 from utils import utils
+from utils.annotator_registry import HotAnnotatorRegistry
 from database import get_dev_db as get_db
 from annotators.polymer.annotator import PolymerAnnotator
 
 import importlib
 
-
-
-ANNOTATOR_REGISTRY = {
-    "material": ("annotators.polymer.annotator", "PolymerAnnotator"),
-    "legal":   ("annotators.legal.annotator", "LegalAnnotator"),
-    "biomedical":  ("annotators.biomedical.annotator", "BiomedicalAnnotator"),
-}
-
-def load_annotator(module_name: str, class_name: str):
-    """
-    Dynamically import an annotator by module and class name.
-    """
-    module = importlib.import_module(module_name)
-    return getattr(module, class_name)
-
-def get_annotator(domain: str):
-    module_name, class_name = ANNOTATOR_REGISTRY[domain]
-    return load_annotator(module_name, class_name)()
+annotator_config_path = "configs/annotators.yaml"
+annotator_registry = HotAnnotatorRegistry(annotator_config_path)
 
 def send_email(to_email,user ,document):
     # Set up the SMTP server
@@ -132,7 +117,7 @@ def process_pdf(file_path,doc_id,db,domain,new_model=False):
     #     model_output, ner_model_output = process_text(all_pages_text_data,new_ner_model,new_ner_logger,new_ner_config,re_tokenizer,re_base_model, re_config,re_args)
     # else:
     #     model_output, ner_model_output = process_text(all_pages_text_data,ner_model,ner_logger,ner_config,re_tokenizer,re_base_model, re_config,re_args)
-    annotator = get_annotator(domain)
+    annotator = annotator_registry.get_annotator(domain)
     model_output, ner_model_output = annotator._annotate(all_pages_text_data)
     # Save data before adding event extraction
     current_doc.set_paragraphs(para_data)
@@ -618,7 +603,7 @@ def re_run_re(update_id, user_id, document_id, use_new_ner_model=False, use_new_
         new_re_model_input = convert_to_RE_model_input_format(entities)
         info_obj = update.get_infor()
         domain = info_obj.get("domain","polymer")
-        annotator = get_annotator(domain)
+        annotator = annotator_registry.get_annotator(domain)
         new_relation = annotator._predict_relation(new_re_model_input,entities)
         # new_relation = predict_re(cur_re_args, cur_re_tokenizer, cur_re_base_model,cur_re_config,new_re_model_input, entities)
 
@@ -639,7 +624,7 @@ def re_run(update_id, user_id, document_id, run_ner, use_new_ner_model=False, us
         
         info_obj = document.get_infor()
         domain = info_obj.get("domain","polymer")
-        annotator = get_annotator(domain)
+        annotator = annotator_registry.get_annotator(domain)
         
         user_notes = update.get_user_notes()
         para_data = document.get_paragraphs()
@@ -722,7 +707,7 @@ def re_run_for_changed_para(update_id, user_id, document_id):
         # new_model_output = predict_re(re_args, re_tokenizer, re_base_model,re_config,new_re_model_input, new_ner)
         info_obj = document.get_infor()
         domain = info_obj.get("domain","polymer")
-        annotator = get_annotator(domain)
+        annotator = annotator_registry.get_annotator(domain)
         new_model_output, new_ner = annotator._annotate(changed_para)
 
         for id,index in enumerate(changed_ids):

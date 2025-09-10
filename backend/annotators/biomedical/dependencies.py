@@ -1,3 +1,4 @@
+
 from typing import List, Dict, Any, Tuple
 
 def kapipe_to_brat(kapipe_docs: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
@@ -110,10 +111,215 @@ def kapipe_to_brat(kapipe_docs: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
                 [["Arg1", t1], ["Arg2", t2]],
             ])
 
-        brat_docs.append({
+        normalized_doc, _ = fix_misaligned_entities({
             "text": text,
             "entities": brat_entities,
             "relations": brat_relations,
         })
-
+        brat_docs.append(normalized_doc)
+    
     return brat_docs
+
+
+import re
+from dataclasses import dataclass
+from typing import List, Tuple, Dict, Any, Optional
+from difflib import SequenceMatcher
+
+@dataclass
+class FixReport:
+    tid: str
+    old_spans: List[Tuple[int, int]]
+    new_spans: List[Tuple[int, int]]
+    reason: str
+
+_PUNCT_EDGES = r""" \t\r\n.,;:!?)]}'"“”’\""""
+
+def _strip_edge_punct(s: str) -> str:
+    return s.strip(_PUNCT_EDGES)
+
+def _normalize_spaces(s: str) -> str:
+    return re.sub(r'\s+', ' ', s)
+
+def _hyphen_tolerant_pattern(token: str) -> str:
+    """
+    Build a regex that tolerates hyphenation inside words:
+    'cancer' -> c-?a-?n-?c-?e-?r (case-insensitive)
+    Keeps non-letters as literals (escaped).
+    """
+    parts = []
+    for ch in token:
+        if ch.isalpha():
+            parts.append(re.escape(ch) + r"-?")
+        else:
+            parts.append(re.escape(ch))
+    return "".join(parts)
+
+def _build_hyphen_tolerant_regex(phrase: str) -> re.Pattern:
+    # Split on whitespace to allow \s+ between words, but allow hyphens inside words.
+    words = _normalize_spaces(phrase).strip().split(" ")
+    word_patterns = [_hyphen_tolerant_pattern(w) for w in words if w]
+    pattern = r"\b" + r"\s+".join(word_patterns) + r"\b"
+    return re.compile(pattern, flags=re.IGNORECASE)
+
+def _find_best_exact_span(doc: str, needle: str, around: Optional[int], window: int) -> Optional[Tuple[int,int,str]]:
+    """
+    Try several exact-ish searches:
+    1) raw needle
+    2) edge-punct stripped
+    3) hyphen-tolerant regex
+    Search priority favors occurrences *near* `around`.
+    """
+    candidates: List[Tuple[int,int,str]] = []
+
+    def add_all_occurrences(pattern: re.Pattern, label: str):
+        for m in pattern.finditer(doc):
+            candidates.append((m.start(), m.end(), label))
+
+    # Limit to a window around the original start to avoid picking far duplicates.
+    L = 0 if around is None else max(0, around - window)
+    R = len(doc) if around is None else min(len(doc), around + window)
+
+    sub = doc[L:R]
+
+    # 1) Raw needle, case-insensitive
+    if needle:
+        raw = re.compile(re.escape(needle), re.IGNORECASE)
+        add_all_occurrences(raw, "exact")
+        # 2) Stripped edges
+        stripped = _strip_edge_punct(needle)
+        if stripped and stripped.lower() != needle.lower():
+            add_all_occurrences(re.compile(re.escape(stripped), re.IGNORECASE), "edge-stripped")
+        # 3) Hyphen-tolerant
+        ht = _build_hyphen_tolerant_regex(stripped or needle)
+        for m in ht.finditer(sub):
+            # map back to absolute
+            candidates.append((L + m.start(), L + m.end(), "hyphen-tolerant"))
+
+    # Rank by distance to `around`
+    if not candidates:
+        return None
+    if around is None:
+        return min(candidates, key=lambda t: t[0])
+    return min(candidates, key=lambda t: abs(t[0] - around))
+
+def _approx_span(doc: str, needle: str, around: Optional[int], window: int, min_ratio: float=0.80) -> Optional[Tuple[int,int]]:
+    """
+    Approximate search in a window using difflib, for last-resort fixing.
+    """
+    if not needle:
+        return None
+    target = _normalize_spaces(_strip_edge_punct(needle))
+    if not target:
+        return None
+    L = 0 if around is None else max(0, around - window)
+    R = len(doc) if around is None else min(len(doc), around + window)
+    sub = doc[L:R]
+
+    best = (None, 0.0, None)  # (span, ratio, text)
+    tlen = len(target)
+    # Slide a window roughly around the same length ± 40%
+    min_len = max(1, int(tlen * 0.6))
+    max_len = min(len(sub), int(tlen * 1.4))
+
+    for start in range(0, max(0, len(sub)-min_len+1), max(1, tlen // 4)):
+        for end in (start + tlen, start + min_len, start + max_len):
+            end = min(len(sub), end)
+            if end <= start: 
+                continue
+            chunk = sub[start:end]
+            ratio = SequenceMatcher(None, target.lower(), chunk.lower()).ratio()
+            if ratio > best[1]:
+                best = ((L + start, L + end), ratio, chunk)
+    if best[0] and best[1] >= min_ratio:
+        return best[0]
+    return None
+
+def fix_misaligned_entities(obj: Dict[str, Any], window: int = 120) -> Tuple[Dict[str, Any], List[FixReport]]:
+    """
+    Input format:
+      obj = {
+        "text": <str>,
+        "entities": [
+            [tid, type, [[start, end], ...], "", surface_text],
+            ...
+        ],
+        "relations": [...]
+      }
+
+    Returns:
+      (new_obj, reports) with corrected spans (in-place content preserved).
+    """
+    doc = obj["text"]
+    entities = obj["entities"]
+    new_entities = []
+    reports: List[FixReport] = []
+
+    for ent in entities:
+        tid, etype, span_list, meta, surface = ent
+        fixed_spans: List[Tuple[int,int]] = []
+        changed = False
+        reasons = []
+
+        for (start, end) in span_list:
+            # Guard invalid ranges
+            if start is None or end is None or start < 0 or end > len(doc) or end <= start:
+                around = start if isinstance(start, int) else None
+                best = _find_best_exact_span(doc, surface, around, window) \
+                    or ( _approx_span(doc, surface, around, window) and (_approx_span(doc, surface, around, window)[0], _approx_span(doc, surface, around, window)[1], "approx") )
+                if best:
+                    if isinstance(best, tuple) and len(best)==3:
+                        ns, ne, lbl = best
+                    else:
+                        ns, ne = best
+                        lbl = "approx"
+                    fixed_spans.append((ns, ne))
+                    changed = True
+                    reasons.append(f"invalid -> {lbl}")
+                else:
+                    # keep as-is if truly unrecoverable
+                    fixed_spans.append((start, end))
+                    reasons.append("invalid-unfixed")
+                continue
+
+            slice_text = doc[start:end]
+            if slice_text == surface:
+                fixed_spans.append((start, end))
+                continue
+
+            # Quick tolerant checks: case-insensitive, edge punctuation
+            if slice_text.lower() == surface.lower():
+                fixed_spans.append((start, end))
+                continue
+            if _strip_edge_punct(slice_text).lower() == _strip_edge_punct(surface).lower():
+                # Keep original if only punctuation differs (spans still valid)
+                fixed_spans.append((start, end))
+                continue
+
+            # Try to re-locate near the original
+            best = _find_best_exact_span(doc, surface, start, window)
+            if best:
+                ns, ne, lbl = best
+                fixed_spans.append((ns, ne))
+                changed = True
+                reasons.append(f"mismatch -> {lbl}")
+            else:
+                approx = _approx_span(doc, surface, start, window)
+                if approx:
+                    ns, ne = approx
+                    fixed_spans.append((ns, ne))
+                    changed = True
+                    reasons.append("mismatch -> approx")
+                else:
+                    # give up, keep original
+                    fixed_spans.append((start, end))
+                    reasons.append("mismatch-unfixed")
+
+        if changed:
+            reports.append(FixReport(tid=tid, old_spans=[tuple(x) for x in span_list], new_spans=fixed_spans, reason="; ".join(sorted(set(reasons)))))
+        # Replace span list
+        new_entities.append([tid, etype, [list(x) for x in fixed_spans], meta, surface])
+
+    new_obj = dict(obj)
+    new_obj["entities"] = new_entities
+    return new_obj, reports

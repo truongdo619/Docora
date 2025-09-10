@@ -1,0 +1,19 @@
+version: 1
+annotators:
+  - domain: material
+    module: annotators.polymer.annotator
+    class: PolymerAnnotator
+    enabled: true
+    kwargs: {}
+
+  - domain: legal
+    module: annotators.legal.annotator
+    class: LegalAnnotator
+    enabled: true
+    kwargs: {}
+
+  - domain: biomedical
+    module: annotators.biomedical.annotator
+    class: BiomedicalAnnotator
+    enabled: true
+    kwargs: {}
