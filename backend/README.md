@@ -101,24 +101,104 @@ uvicorn app:app --host 0.0.0.0 --port 8000
 Docora’s backend is designed for **extensibility**. To add a new domain:  
 
 1. Create a new folder under `annotators/` (e.g., `annotators/chemistry/`).  
+```     
+      annotators/
+      └── chemistry/
+            ├── init.py
+            ├── annotator.py
+            └── resources/
+                  └── setting.json
+```
 2. Implement the following files inside the newly added folder:  
    - `__init__.py` – to register the annotator.  
    - `annotator.py` 
-            – defines the `_predict_entity(text: List[str]) -> List[Dict]` function returning entities.  
-            – defines the `_predict_relation(text: List[str]) -> List[Dict]` function returning relations.  
-            – defines the `annotate(text: List[str]) -> Tuple(List[Dict],List[Dict])` function returning entities and relations.  
+            - defines the `_predict_entity(text: List[str]) -> List[Dict]` function returning entities.  
+            - defines the `_predict_relation(text: List[str]) -> List[Dict]` function returning relations.  
+            - defines the `annotate(text: List[str]) -> Tuple(List[Dict],List[Dict])` function returning entities and relations.  
             - The input of each function is a list of paragraphs or sentences. 
-            
-
+            - The Dict in output of all 3 function must follow the format below:
+      ```
+                  {
+                        "text": <content of the single input paragraph/sentence>,
+                        "entities":[
+                              [
+                                    "T#" <ID of entity>,
+                                    <Entity type>,
+                                    [
+                                          [
+                                                <Start position>,
+                                                <End position>,
+                                          ]
+                                    ],
+                                    <Comment about the entity>,
+                                    <Plain text of the entity>
+                              ]
+                        ],
+                        "relations":[
+                              [
+                                    "R#" <ID of the relation>,
+                                    <Relation type>,
+                                    [
+                                          [
+                                                <role of the first argument>,
+                                                <ID of the first argument>
+                                          ],
+                                          [
+                                                <role of the second argument>,
+                                                <ID of the second argument>
+                                          ]
+                                    ]
+                              ]
+                        ]
+                  }
+      ```
+            - The ID of an entity must have the format "T#" where # is a natural number.
+            - The ID of a relation must have the format "R#" where # is a natural number.
    - `resources/setting.json` – schema definition (entity/relation types).  
+            - The setting must have structure below:
+      ```
+                  {
+                        "domain": "chemistry", # the name of domain
+                        "setting": {
+                              "entity_types": [ # define of entity types and color of each entity on the UI
+                                    { 
+                                          "type": "METAL",
+                                          "labels": ["METAL"],
+                                          "bgColor": "#ff6b6b",
+                                          "borderColor": "darken" 
+                                    },
+                                    { 
+                                          "type": "NON_METAL",
+                                          "labels": ["NON_METAL"],
+                                          "bgColor": "#1e90ff",
+                                          "borderColor": "darken" 
+                                    },
+                                    
+                              ],
+                              "relation_types": [ # define of relation types
+                                    {
+                                          "type": "has_reaction",
+                                          "labels": ["has_reaction"],
+                                          "dashArray": "3,3",
+                                          "color": "black",
+                                          "args": [
+                                                { "role": "Arg1", "targets": ["METAL"] },
+                                                { "role": "Arg2", "targets": ["NON_METAL"] }
+                                          ]
+                                    }
+                              ]
+                        }
+                  }
+      ```
 3. Add the new annotator to the backend `configs/annotators.yaml`.  
       The new information of annotator added to file `configs/annotators.yaml` must have the format below:   
-        -   domain: chemistry                         # this must match the domain field in file `annotators/chemistry/resources/setting.json`
-            module: annotators.chemistry.annotator    # path of file that define the function `annotate`
-            class: ChemistryAnnotator                 # name of the class of the newly added annotator
-            enabled: true           
-            kwargs: {}
-
+```
+      - domain: chemistry      # match the domain field in file `annotators/chemistry/resources/setting.json`
+        module: annotators.chemistry.annotator    # path of file that define the function `annotate`
+        class: ChemistryAnnotator                 # name of the class of the newly added annotator
+        enabled: true           
+        kwargs: {}
+```
 
 
 4. Restart the backend server and Celery worker.  
@@ -130,11 +210,11 @@ Your annotator will now be available as part of the pipeline, and the frontend w
 
 Currently supported domains are:  
 
-| Domain     | Dataset / Model | F1 Score (NER) | Notes |
-|------------|-----------------|----------------|-------|
-| **Material**   | PolyNERE (LREC 2024) | ~81.2 | Strong coverage for polymers, materials entities |
-| **Biomedical** | SciERC / PubMed subset | ~79.5 | Robust for biomedical named entities and relations |
-| **Legal**      | COLIEE corpus | ~76.0 | Focused on case law entities and legal terms |
+| Domain     | Dataset / Model | F1 Score (NER) | F1 Score (RE) | Notes |
+|------------|-----------------|----------------|-------------- |-------|
+| **Material**   | PolyNERE (LREC 2024) | ~81.2 | ~85.63 | Strong coverage for polymers, materials entities |
+| **Biomedical** | BioCreative V CDR corpus (RE), DocRE (RE), GENIA(NER)  | ~80.5 | ~63.4 | Robust for biomedical named entities and relations |
+| **Legal**      | Corpus publish in [Named Entity Recognition in Indian court judgments](https://aclanthology.org/2022.nllp-1.15.pdf) | ~76.0 |   ------ | Focused on case law entities and legal terms |
 
 ---
 
