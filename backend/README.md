@@ -100,10 +100,10 @@ uvicorn app:app --host 0.0.0.0 --port 8000
 
 Docora’s backend is designed for **extensibility**. To add a new domain:  
 
-1. Create a new folder under `annotators/` (e.g., `annotators/chemistry/`).  
+1. Create a new folder under `annotators/` (e.g., `annotators/biomedical/`).  
 ```     
       annotators/
-      └── chemistry/
+      └── biomedical/
             ├── init.py
             ├── annotator.py
             └── resources/
@@ -158,18 +158,18 @@ Docora’s backend is designed for **extensibility**. To add a new domain:
             - The setting must have structure below:
       ```
                   {
-                        "domain": "chemistry", # the name of domain
+                        "domain": "biomedical", # the name of domain
                         "setting": {
                               "entity_types": [ # define of entity types and color of each entity on the UI
                                     { 
-                                          "type": "METAL",
-                                          "labels": ["METAL"],
+                                          "type": "DISEASE",
+                                          "labels": ["DISEASE"],
                                           "bgColor": "#ff6b6b",
                                           "borderColor": "darken" 
                                     },
                                     { 
-                                          "type": "NON_METAL",
-                                          "labels": ["NON_METAL"],
+                                          "type": "CHEMICAL",
+                                          "labels": ["CHEMICAL"],
                                           "bgColor": "#1e90ff",
                                           "borderColor": "darken" 
                                     },
@@ -177,13 +177,13 @@ Docora’s backend is designed for **extensibility**. To add a new domain:
                               ],
                               "relation_types": [ # define of relation types
                                     {
-                                          "type": "has_reaction",
-                                          "labels": ["has_reaction"],
+                                          "type": "CID",
+                                          "labels": ["CID"],
                                           "dashArray": "3,3",
                                           "color": "black",
                                           "args": [
-                                                { "role": "Arg1", "targets": ["METAL"] },
-                                                { "role": "Arg2", "targets": ["NON_METAL"] }
+                                                { "role": "Arg1", "targets": ["DISEASE"] },
+                                                { "role": "Arg2", "targets": ["CHEMICAL"] }
                                           ]
                                     }
                               ]
@@ -193,9 +193,9 @@ Docora’s backend is designed for **extensibility**. To add a new domain:
 3. Add the new annotator to the backend `configs/annotators.yaml`.  
       The new information of annotator added to file `configs/annotators.yaml` must have the format below:   
 ```
-      - domain: chemistry      # match the domain field in file `annotators/chemistry/resources/setting.json`
-        module: annotators.chemistry.annotator    # path of file that define the function `annotate`
-        class: ChemistryAnnotator                 # name of the class of the newly added annotator
+      - domain: biomedical      # match the domain field in file `annotators/biomedical/resources/setting.json`
+        module: annotators.biomedical.annotator    # path of file that define the function `annotate`
+        class: BiomedicalAnnotator                 # name of the class of the newly added annotator
         enabled: true           
         kwargs: {}
 ```
