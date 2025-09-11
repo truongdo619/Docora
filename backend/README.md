@@ -210,12 +210,44 @@ Your annotator will now be available as part of the pipeline, and the frontend w
 
 Currently supported domains are:  
 
-| Domain     | Dataset / Model | F1 Score (NER) | F1 Score (RE) | Notes |
-|------------|-----------------|----------------|-------------- |-------|
-| **Material**   | PolyNERE (LREC 2024) | ~81.2 | ~85.63 | Strong coverage for polymers, materials entities |
-| **Biomedical** | BioCreative V CDR corpus (RE), DocRE (RE), GENIA(NER)  | ~80.5 | ~63.4 | Robust for biomedical named entities and relations |
-| **Legal**      | Corpus publish in [Named Entity Recognition in Indian court judgments](https://aclanthology.org/2022.nllp-1.15.pdf) | ~76.0 |   ------ | Focused on case law entities and legal terms |
+### Biomedical domain
+#### Dataset:
+Named Entity Recognition (NER)
+- [ACE 20042](https://catalog.ldc.upenn.edu/LDC2005T09)
+- [ACE 20053](https://catalog.ldc.upenn.edu/LDC2006T06)
+- [GENIA](https://academic.oup.com/bioinformatics/article/19/suppl_1/i180/227927)
 
+Entity Disambiguation Retrieval (ED Retrieval)
+- MeSH 2015
+
+Document-level Relation Extraction
+- DocRE
+#### Method:
+- Named Entity Recognition (NER): Biaffine-NER [(Yu et al., 2020)](https://aclanthology.org/2020.acl-main.577/), Span-based BERT model using biaffine scoring
+- Entity Disambiguation Retrieval (ED Retrieval): BLINK Bi-Encoder [(Wu et al., 2020)](https://aclanthology.org/2020.emnlp-main.519/), Dense retriever using BERT-based encoders and approximate nearest neighbor search
+- Entity Disambiguation Reranking (ED-Reranking): [(Wu et al., 2020)](https://aclanthology.org/2020.emnlp-main.519/): Reranker using a BERT-based encoder for candidates from the Bi-Encoder
+- Document-level Relation Extraction (DocRE): ATLOP [(Zhou et al., 2021)](https://ojs.aaai.org/index.php/AAAI/article/view/17717) BERT-based model for DocRE
+
+#### Performance
+| Component | F1 Score | Dataset |
+|-----------|----------|---------|
+| NER | 93.5 | CoNLL-2003 (English) |
+|     | 91.3 | OntoNotes |
+|     | 85.4 | ACE2005 (nested NER) |
+|     | 80.5 | GENIA |
+| DocRE | 63.4 | DocRED (general domain) |
+
+### Legal domain
+#### Dataset:
+- publish in the paper "[Named Entity Recognition in Indian court judgments](https://aclanthology.org/2022.nllp-1.15/)"
+
+#### Method:
+- Baseline model was trained using spacy-transformers. Detail of model is shown in [https://github.com/Legal-NLP-EkStep/legal_NER ](https://github.com/Legal-NLP-EkStep/legal_NER)
+
+#### Result:
+| Component | F1 Score |
+|-----------|----------|
+| NER | 91.076 | 
 ---
 
 🚀 With Docora backend, researchers can integrate domain-specific knowledge extraction pipelines while benefiting from a unified frontend for annotation and visualization.
