@@ -224,8 +224,6 @@ Document-level Relation Extraction
 - DocRE
 #### Method:
 - Named Entity Recognition (NER): Biaffine-NER [(Yu et al., 2020)](https://aclanthology.org/2020.acl-main.577/), Span-based BERT model using biaffine scoring
-- Entity Disambiguation Retrieval (ED Retrieval): BLINK Bi-Encoder [(Wu et al., 2020)](https://aclanthology.org/2020.emnlp-main.519/), Dense retriever using BERT-based encoders and approximate nearest neighbor search
-- Entity Disambiguation Reranking (ED-Reranking): [(Wu et al., 2020)](https://aclanthology.org/2020.emnlp-main.519/): Reranker using a BERT-based encoder for candidates from the Bi-Encoder
 - Document-level Relation Extraction (DocRE): ATLOP [(Zhou et al., 2021)](https://ojs.aaai.org/index.php/AAAI/article/view/17717) BERT-based model for DocRE
 
 #### Performance
