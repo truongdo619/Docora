@@ -101,11 +101,26 @@ uvicorn app:app --host 0.0.0.0 --port 8000
 Docora’s backend is designed for **extensibility**. To add a new domain:  
 
 1. Create a new folder under `annotators/` (e.g., `annotators/chemistry/`).  
-2. Implement the following files:  
+2. Implement the following files inside the newly added folder:  
    - `__init__.py` – to register the annotator.  
-   - `inference.py` – defines the `annotate(text: str) -> dict` function returning entities and relations.  
-   - `config.json` – schema definition (entity/relation types).  
-3. Add the new annotator to the backend `config/settings.json`.  
+   - `annotator.py` 
+            – defines the `_predict_entity(text: List[str]) -> List[Dict]` function returning entities.  
+            – defines the `_predict_relation(text: List[str]) -> List[Dict]` function returning relations.  
+            – defines the `annotate(text: List[str]) -> Tuple(List[Dict],List[Dict])` function returning entities and relations.  
+            - The input of each function is a list of paragraphs or sentences. 
+            
+
+   - `resources/setting.json` – schema definition (entity/relation types).  
+3. Add the new annotator to the backend `configs/annotators.yaml`.  
+      The new information of annotator added to file `configs/annotators.yaml` must have the format below:   
+        -   domain: chemistry                         # this must match the domain field in file `annotators/chemistry/resources/setting.json`
+            module: annotators.chemistry.annotator    # path of file that define the function `annotate`
+            class: ChemistryAnnotator                 # name of the class of the newly added annotator
+            enabled: true           
+            kwargs: {}
+
+
+
 4. Restart the backend server and Celery worker.  
 
 Your annotator will now be available as part of the pipeline, and the frontend will automatically display results according to the schema.
