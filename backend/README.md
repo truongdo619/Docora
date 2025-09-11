@@ -208,47 +208,132 @@ Your annotator will now be available as part of the pipeline, and the frontend w
 
 ## Supported Domains and Results
 
-Currently supported domains are:  
+Currently, the system supports the following domains:
 
-### Biomedical domain
-#### Dataset:
-Named Entity Recognition (NER)
-- [ACE 20042](https://catalog.ldc.upenn.edu/LDC2005T09)
-- [ACE 20053](https://catalog.ldc.upenn.edu/LDC2006T06)
-- [GENIA](https://academic.oup.com/bioinformatics/article/19/suppl_1/i180/227927)
+### Material Domain
 
-Entity Disambiguation Retrieval (ED Retrieval)
-- MeSH 2015
+#### Supported Entity Types
+We adopt the **PolyNERE ontology** for materials science, with 14 entity types covering polymers, related materials, properties, experimental settings, and references.  
 
-Document-level Relation Extraction
-- DocRE
-#### Method:
-- Named Entity Recognition (NER): Biaffine-NER [(Yu et al., 2020)](https://aclanthology.org/2020.acl-main.577/), Span-based BERT model using biaffine scoring
-- Document-level Relation Extraction (DocRE): ATLOP [(Zhou et al., 2021)](https://ojs.aaai.org/index.php/AAAI/article/view/17717) BERT-based model for DocRE
+| Entity Type       | Definition | Example |
+|-------------------|------------|---------|
+| **POLYMER**       | Material entities that are polymers. | “Sulfonated poly(phthalazinone ether ketone nitrile)”, “polyethylene” |
+| **POLYMER_FAMILY**| A class of polymers. | “bio-polyimides”, “PIs”, “epoxy”, “poly(amic acid)s”, “polyanhydride” |
+| **PROP_NAME**     | Specific material property names. | “ion conductivity”, “power density”, “glass transition temperature” |
+| **PROP_VALUE**    | Numeric value + unit of a property. | “9400 g/mol”, “<16 wt%”, “>100,000 g/mol” |
+| **MONOMER**       | Repeat units of a polymer. | “N-isopropylacrylamide”, “4,4′-bisphenol” |
+| **ORGANIC**       | Organic materials (non-polymers). | “hydroxy urea”, “divinyl benzene”, “maleic acid”, “PFSA” |
+| **INORGANIC**     | Inorganic materials, often additives. | “Ag”, “indium(III) oxide”, “In₂O₃” |
+| **MATERIAL_AMOUNT** | Amount of a material in a formulation. | “90%”, “5 wt.%”, “10 mass%” |
+| **COMPOSITE**     | Materials formed from multiple distinct components. | “TiO₂-DA-PEI”, “GO/PVA”, “PVdF:PEMA” |
+| **OTHER_MATERIAL**| Materials not fitting other categories, including mixtures. | “anion exchange membranes”, “ethanol/water”, “porous film” |
+| **CONDITION**     | Condition under which property is measured. | “at 50°C”, “using air O₂”, “between 15 and 60°C” |
+| **SYN_METHOD**    | Techniques for synthesizing a material. | “ring-opening polymerization”, “radical terpolymerization” |
+| **CHAR_METHOD**   | Techniques for characterizing a material. | “dynamic light scattering”, “neutron transmission measurements” |
+| **REF_EXP**       | Referring expressions pointing to entities. | “They”, “this polymer”, “the resulting copolymers” |
+
+
+#### Supported Relation Types
+Relations define how entities connect within materials science texts.  
+
+- **synthesized_by** → (Material_Group → Syn_Method)  
+- **characterized_by** → (Material_Group → Char_Method) OR (Prop_Name → Char_Method)  
+- **has_property** → (Material_Group → Prop_Name)  
+- **has_value** → (Prop_Name → Prop_Value)  
+- **has_amount** → (Material_Group → Material_Amount)  
+- **has_condition** → (Prop_Name/Prop_Value → Condition)  
+- **abbreviation_of** → (Ref_Exp → Material_Group / Prop_Name / Syn_Method / Char_Method)  
+- **refers_to** → (Ref_Exp → Material_Group / Prop_Name / Syn_Method / Char_Method / Ref_Exp)  
+
+Special cases:  
+1. `has_value` is used when **Prop_Name is missing or unclear**.  
+2. `has_condition` is used when **Prop_Value is missing or unclear**.  
+3. `characterized_by` can also link **Material_Group** when it is missing or unclear.  
+
+
+#### Methods
+- **Entity Detection:**  
+  We use **W2NER** ([Li et al., AAAI 2022](https://doi.org/10.1609/aaai.v36i10.21344)), a span-alignment model that handles flat, overlapped, and discontinuous mentions effectively.  
+
+- **Relation Extraction:**  
+  We adopt **ATLOP** ([Zhou et al., AAAI 2021](https://doi.org/10.1609/aaai.v35i16.17717)), a document-level RE model with adaptive thresholding and attention pooling, well-suited for cross-sentence reasoning.  
+
+Both models are trained on the **PolyNERE corpus** (750 abstracts with 14 entity types and multiple relations).
+
 
 #### Performance
-| Component | F1 Score | Dataset |
-|-----------|----------|---------|
-| NER | 93.5 | CoNLL-2003 (English) |
-|     | 91.3 | OntoNotes |
-|     | 85.4 | ACE2005 (nested NER) |
-|     | 80.5 | GENIA |
-| DocRE | 63.4 | DocRED (general domain) |
+Evaluation was conducted on the PolyNERE test set (75 abstracts).  
 
-### Legal domain
-#### Dataset:
-- publish in the paper "[Named Entity Recognition in Indian court judgments](https://aclanthology.org/2022.nllp-1.15/)"
+| Task                   | Method  | Encoder     | Precision | Recall | F1 Score |
+|------------------------|---------|-------------|-----------|--------|----------|
+| Named Entity Recognition | W2NER   | MatSciBERT | 78.05     | 76.53  | 77.28    |
+| Relation Extraction      | ATLOP   | MatSciBERT | 83.99     | 82.49  | 83.23    |
 
-#### Method:
-- Baseline model was trained using spacy-transformers. Detail of model is shown in [https://github.com/Legal-NLP-EkStep/legal_NER ](https://github.com/Legal-NLP-EkStep/legal_NER)
-
-#### Result:
-| Component | F1 Score |
-|-----------|----------|
-| NER | 91.076 | 
 ---
 
-🚀 With Docora backend, researchers can integrate domain-specific knowledge extraction pipelines while benefiting from a unified frontend for annotation and visualization.
+### Biomedical Domain
+
+#### Supported Entity Types and Relations
+The biomedical domain focuses on detecting diseases, chemicals, and their relations.  
+- **Entity types:** `Chemical`, `Disease`  
+- **Relation types:** `Chemical-Induce-Disease`
+
+
+#### Methods
+- **Entity Detection:**  
+  We adopt the **Span-based Biaffine-NER** approach ([Yu et al., ACL 2020](https://aclanthology.org/2020.acl-main.577/)).  
+  This method employs a span-based BERT model with biaffine scoring to capture entity boundaries and labels.  
+
+- **Relation Extraction:**  
+  We use **ATLOP** ([Zhou et al., AAAI 2021](https://ojs.aaai.org/index.php/AAAI/article/view/17717)), a widely used approach for document-level relation extraction.  
+  The base encoder is a BERT-based model.
+
+
+#### Performance
+We evaluate on the **CDR test set** ([Li et al., Database 2016](https://academic.oup.com/database/article/doi/10.1093/database/baw068/2630414)).
+
+| Task                | Method | Precision | Recall | F1 Score |
+|---------------------|--------|-----------|--------|----------|
+| Relation Extraction | ATLOP  | 64.61     | 75.92  | 69.74    |
+
+---
+
+### Legal Domain
+
+#### Supported Entity Types and Relations
+In the legal domain, we focus on **entity detection**. Relation extraction is not currently supported. The supported entity types are listed below:
+
+| Entity Type  | Extracted From       | Description |
+|--------------|----------------------|-------------|
+| **COURT**        | Preamble, Judgment | Name of the court delivering the current judgment (from Preamble) or any court mentioned (from judgment sentences). |
+| **PETITIONER**   | Preamble, Judgment | Petitioners / appellants / revisionists in the current case. |
+| **RESPONDENT**   | Preamble, Judgment | Respondents / defendants / opposition parties in the current case. |
+| **JUDGE**        | Preamble, Judgment | Judges of the current case (from Preamble) and judges of current/previous cases (from judgment sentences). |
+| **LAWYER**       | Preamble           | Lawyers representing both parties. |
+| **DATE**         | Judgment           | Any date mentioned in the judgment. |
+| **ORG**          | Judgment           | Organizations apart from courts, e.g., banks, PSUs, private companies, police stations, state government, etc. |
+| **GPE**          | Judgment           | Geopolitical entities such as countries, states, cities, districts, and villages. |
+| **STATUTE**      | Judgment           | Names of acts or laws cited in the judgment. |
+| **PROVISION**    | Judgment           | Sections, sub-sections, articles, orders, or rules under a statute. |
+| **PRECEDENT**    | Judgment           | Past cases cited as precedent (party names + citation or case number). |
+| **CASE_NUMBER**  | Judgment           | Case numbers mentioned in the judgment (excluding precedent references). |
+| **WITNESS**      | Judgment           | Names of witnesses in the current case. |
+| **OTHER_PERSON** | Judgment           | Persons not classified as petitioner, respondent, judge, or witness. |
+
+#### Methods
+We use an AI model based on a **transition-based dependency parser** built on top of the `roberta-base` architecture.  
+The model is trained with **spaCy-Transformers** and is available here: [opennyaiorg/en_legal_ner_trf](https://huggingface.co/opennyaiorg/en_legal_ner_trf).
+
+#### Performance
+
+We evaluate on the **Indian court judgment** ([Prathamesh et al., nllp 2024](https://aclanthology.org/2022.nllp-1.15.pdf)).
+
+| Metric      | Score   |
+|-------------|---------|
+| **F1-Score**   | 91.08  |
+| **Precision**  | 91.98  |
+| **Recall**     | 90.19  |
+
 
 
 ## License
